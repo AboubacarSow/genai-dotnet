@@ -1,0 +1,78 @@
+## Ignore Visual Studio temporary files, build results, and
+## user-specific files for a .NET project
+
+# Visual Studio
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# Build results
+[Bb]in/
+[Oo]bj/
+*/bin/
+*/obj/
+
+# NuGet
+packages/
+*.nupkg
+*.snupkg
+
+# Visual Studio Code workspace
+.vscode/
+
+# Rider
+.idea/
+*.sln.iml
+
+# Resharper
+_ReSharper*/
+*.DotSettings.user
+
+# User-specific files
+*.rsuser
+*.userprefs
+
+# Publish outputs
+publish/
+dist/
+out/
+artifacts/
+
+# Test results
+TestResults/
+*.trx
+coverage/
+coverage*.xml
+
+# Logs
+*.log
+
+# OS generated files
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Runtime / temporary
+*.pid
+*.seed
+
+# Common binaries and generated files
+*.dll
+*.exe
+*.pdb
+*.so
+*.dylib
+*.class
+
+# Other
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Secret files (keep out of repo)
+secrets.json
+**/secrets.json
+
