@@ -1,35 +1,16 @@
-﻿using System.ClientModel;
-using Microsoft.Extensions.AI;
-using Microsoft.Extensions.Configuration;
-using OpenAI;
+﻿using Microsoft.Extensions.AI;
+using OllamaSharp;
 
-IConfiguration configuration = new ConfigurationBuilder()
-                                            .AddUserSecrets<Program>()
-                                            .Build();
-var apiToken = configuration
-                .GetRequiredSection("GithubModels:Token").Value!;
-var credential = new ApiKeyCredential(apiToken);
-var endpoint_url = "https://models.github.ai/inference";
-
-//var availableModels = await ListModelsAsync(endpoint_url,apiToken);
-var options = new OpenAIClientOptions
-{
-    Endpoint = new Uri(endpoint_url)
-};
-var model = "openai/gpt-4o-mini";
-
-IChatClient client = new OpenAIClient(credential, options)
-                                .GetChatClient(model)
-                                .AsIChatClient();
+IChatClient client = new OllamaApiClient(new Uri("http://localhoost:11434"),"llama3.2");
 
 #region  Basic completion
-//var prompt = "What is Semantic Kernal? Explain it in 20 words max";
-//Console.WriteLine($"user input : >> {prompt}");
-//var response = await chatClient.GetResponseAsync(prompt);
+var prompt = "What is Semantic Kernal? Explain it in 20 words max";
+Console.WriteLine($"user input : >> {prompt}");
+var response = await client.GetResponseAsync(prompt);
 
-//Console.WriteLine($"Assistant AI: >> {response}");
+Console.WriteLine($"Assistant AI: >> {response}");
 
-//Console.WriteLine($"Token used: in={response.Usage?.InputTokenCount} - out={response.Usage?.OutputTokenCount}");
+Console.WriteLine($"Token used: in={response.Usage?.InputTokenCount} - out={response.Usage?.OutputTokenCount}");
 
 #endregion
 
@@ -165,43 +146,41 @@ IChatClient client = new OpenAIClient(credential, options)
 #endregion
 
 #region ChatApplication
-var context = """
-            You are a friendly hiking enthusiast who helps people discover fun hikes in their area.
-            You introduce yourself when first saying hello.
-            When helping people out, you always ask them for this information
-            to inform the hiking recommendation you provide:
+// var context = """
+//             You are a friendly hiking enthusiast who helps people discover fun hikes in their area.
+//             You introduce yourself when first saying hello.
+//             When helping people out, you always ask them for this information
+//             to inform the hiking recommendation you provide:
 
-            1. The location where they would like to hike
-            2. What hiking intensity they are looking for
+//             1. The location where they would like to hike
+//             2. What hiking intensity they are looking for
 
-            You will then provide three suggestions for nearby hikes that vary in length
-            after you get that information. You will also share an interesting fact about
-            the local nature on the hikes when making a recommendation. At the end of your
-            response, ask if there is anything else you can help with.
-        """;
-List<ChatMessage> chatHistory =
-[
-    new ChatMessage(ChatRole.System,context)
-];
+//             You will then provide three suggestions for nearby hikes that vary in length
+//             after you get that information. You will also share an interesting fact about
+//             the local nature on the hikes when making a recommendation. At the end of your
+//             response, ask if there is anything else you can help with.
+//         """;
+// List<ChatMessage> chatHistory =
+// [
+//     new ChatMessage(ChatRole.System,context)
+// ];
 
-while(true){
-    Console.WriteLine("Your prompt");
+// while(true){
+//     Console.WriteLine("Your prompt");
 
-    var userPrompt = Console.ReadLine();
-    chatHistory.Add(new ChatMessage(ChatRole.User,userPrompt));
+//     var userPrompt = Console.ReadLine();
+//     chatHistory.Add(new ChatMessage(ChatRole.User,userPrompt));
 
-    Console.WriteLine("AI Response");
+//     Console.WriteLine("AI Response");
 
-    var response = client.GetStreamingResponseAsync(chatHistory);
-    var streams = string.Empty;
-    await foreach(var chunck in response)
-    {
-        Console.Write(chunck);
-        streams += chunck;
-    }
-    chatHistory.Add(new ChatMessage(ChatRole.Assistant, streams));
-    Console.WriteLine();
-}
+//     var response = client.GetStreamingResponseAsync(chatHistory);
+//     var streams = string.Empty;
+//     await foreach(var chunck in response)
+//     {
+//         Console.Write(chunck);
+//         streams += chunck;
+//     }
+//     chatHistory.Add(new ChatMessage(ChatRole.Assistant, streams));
+//     Console.WriteLine();
+// }
 #endregion
-
-
